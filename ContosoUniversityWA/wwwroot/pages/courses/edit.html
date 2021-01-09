@@ -100,18 +100,32 @@
                 data: course,
             }).done().fail();
         }
+
+        let httpDelete = new Promise(function (myResolve, myReject) {
+            $.delete("http://localhost:3000/courses")
+                .done(res => myResolve(res))
+                .fail(res => myReject(res));
+        });
+
         function DeleteCourse() {
-            var course = {};
-            course.id = $("#jsonId").val();
-            course.courseid = $("#courseId").val();
-            course.coursetitle = $("#courseTitle").val();
-            $.ajax({
-                url: "http://localhost:3000/courses/" + course.id,
-                type: 'DELETE',
-                data: course,
-            }).done().fail();
+            //var course = {};
+            //course.id = $("#jsonId").val();
+            //course.courseid = $("#courseId").val();
+            //course.coursetitle = $("#courseTitle").val();
+            //$.ajax({
+            //    url: "http://localhost:3000/courses/" + course.id,
+            //    type: 'DELETE',
+            //    data: course,
+            //}).done().fail();
+
+            //$.delete("http://localhost:3000/courses/", course)
+            //    .done(res => DisplayCourse(res))
+            //    .fail(res => Error(res));
+
+            httpDelete.then(res => SuccessGet(res),
+                res => Error(res));            
         }
-        
+
         function EditData(id) {
             var tdid = $("#td1").find('tr:eq(' + id + ')').find('td:eq(0)');
             var sid = tdid.html();

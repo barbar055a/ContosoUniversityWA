@@ -115,18 +115,32 @@
                 data: student,
             }).done().fail();
         }
+
+        let httpDelete = new Promise(function (myResolve, myReject) {
+            $.delete("http://localhost:3000/students")
+                .done(res => myResolve(res))
+                .fail(res => myReject(res));
+        });
+
         function DeleteStudent() {
-            var student = {};
-            student.id = $("#studentId").val();
-            student.lastname = $("#lastName").val();
-            student.firstname = $("#firstMidName").val();
-            student.enrollmentdate = $("#enrollmentDate").val();
-            student.courseid = $("#courseId").val();
-            $.ajax({
-                url: "http://localhost:3000/students/" + student.id,
-                type: 'DELETE',
-                data: student,
-            }).done().fail();
+            //var student = {};
+            //student.id = $("#studentId").val();
+            //student.lastname = $("#lastName").val();
+            //student.firstname = $("#firstMidName").val();
+            //student.enrollmentdate = $("#enrollmentDate").val();
+            //student.courseid = $("#courseId").val();
+            //$.ajax({
+            //    url: "http://localhost:3000/students/" + student.id,
+            //    type: 'DELETE',
+            //    data: student,
+            //}).done().fail();
+
+            //$.delete("http://localhost:3000/students/", student)
+            //    .done(res => DisplayStudent(res))
+            //    .fail(res => Error(res));
+
+            httpDelete.then(res => SuccessGet(res),
+                res => Error(res));
         }
         
         function EditData(id) {

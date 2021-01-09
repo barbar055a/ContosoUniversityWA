@@ -104,13 +104,13 @@
         function LoadCourses() {
             var courses = [];
             $.get("http://localhost:3000/courses")
-                .done(function (response) {
-                    courses = response;
+                .done(function (res) {
+                    courses = res;
                     $.each(courses, function (id, course) {
                         $("#courseDropDown").append($("<option></option>").val(course.courseid).text(course.courseid + " - " + course.coursetitle));
                     });
                 })
-                .fail(response => Error(response));
+                .fail(res => Error(res));
         }
         $(document).ready(function () {
             // event fires when browser is loaded. The above body onload event fires before browser is loaded
