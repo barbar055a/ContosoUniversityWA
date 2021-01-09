@@ -1,0 +1,122 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+    <link rel="stylesheet" href="../../css/site.css" />
+    <title>Contoso University</title>
+</head>
+<body class="d-flex flex-column h-100">
+
+    <!-- Nav Bar -->
+    <div id="nav" class="container-fluid navbar navbar-expand-lg navbar-dark bg-primary">
+        <ul class="navbar-nav mr-auto">
+            <a class="nav-link" href="../../index.html" target="">Home</a>
+            <a class="nav-link" href="../students/students.html" target="">Students</a>
+            <a class="nav-link" href="../courses/courses.html" target="">Courses</a>
+        </ul>
+    </div>
+    <div id="nav" class="container-fluid navbar navbar-expand-lg navbar-dark bg-secondary">
+        <ul class="navbar-nav mr-auto">
+            <a class="nav-link" href="../students/create.html" target="">Add new student</a>
+            <a class="nav-link" href="../courses/create.html" target="">Add new course</a>
+        </ul>
+    </div>
+
+    <main role="main" class="flex-shrink-0">
+        <table id="td1">
+            <div class="container mt-4">
+                <h4>Add new student</h4>
+                <hr />
+                <div class="row">
+                    <div class="col-md-4">
+                        <form novalidate="novalidate">
+                            <div class="form-group">
+                                <label for="studentId" class="control-label">Student Id</label>
+                                <input type="number" id="studentId" class="form-control" disabled />
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName" class="control-label">Last Name</label>
+                                <input type="text" id="lastName" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label for="firstMidName" class="control-label">First Name</label>
+                                <input type="text" id="firstMidName" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label for="enrollmentDate" class="control-label">Enrollment Date</label>
+                                <input type="date" name="enrollmentDate" id="enrollmentDate" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label for="courseTitle" class="control-label">Course Title</label>
+                                <select id="courseDropDown" class="form-control" ></select>
+                            </div>
+                        </form>
+                        <div class="form-group">
+                            <a href="./students.html" class="btn btn-secondary">Cancel</a>
+                            <a href="./students.html" class="btn btn-primary" onclick="AddStudents()">Save</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </table>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+
+    <script>
+        function AddStudents() {
+            let student = {};
+            student.id = $("#studentId").val();
+            student.lastname = $("#lastName").val();
+            student.firstname = $("#firstMidName").val();
+            student.enrollmentdate = $("#enrollmentDate").val();
+            student.courseid = $("#courseDropDown").val();
+            //alert(student.id);
+            //alert(student.lastname);
+            if ((student.lastname.length == 0) || (student.firstname.length == 0)) {
+                alert("missing input");
+            }
+            else {
+                $.post("http://localhost:3000/students", student)
+                    .done(res => Success(res))
+                    .fail(res => Error(res));
+            }
+        }
+        function Success(res) {
+            window.location = "students.html";
+        }
+        function Error(res) {
+            alert("error");
+            console.log(res);
+        }
+        function LoadCourses() {
+            var courses = [];
+            $.get("http://localhost:3000/courses")
+                .done(function (response) {
+                    courses = response;
+                    $.each(courses, function (id, course) {
+                        $("#courseDropDown").append($("<option></option>").val(course.courseid).text(course.courseid + " - " + course.coursetitle));
+                    });
+                })
+                .fail(response => Error(response));
+        }
+        $(document).ready(function () {
+            // event fires when browser is loaded. The above body onload event fires before browser is loaded
+            LoadCourses();
+        });
+
+    </script>
+</body>
+</html>
